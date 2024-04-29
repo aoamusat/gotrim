@@ -5,13 +5,17 @@ info:
     version: 0.0.1
 servers:
     - url: http://localhost:3050
+    - url: https://api.gotrim.olayml.xyz/{version}/
+      variables:
+        version:
+            default: v1
 paths:
     /api/v1/shorten:
         post:
             tags:
-                - create
-            summary: create create
-            operationId: create#create
+                - UrlShortener
+            summary: CreateShortUrl UrlShortener
+            operationId: UrlShortener#CreateShortUrl
             requestBody:
                 required: true
                 content:
@@ -28,24 +32,78 @@ paths:
                         example:
                             long_url: Autem autem assumenda earum.
             responses:
-                "200":
-                    description: OK response.
+                "201":
+                    description: Created response.
                     content:
                         application/json:
                             schema:
                                 type: string
-                                example: Eius porro fugit.
-                            example: Consequatur et nihil quam temporibus.
+                                example:
+                                    - 69
+                                    - 105
+                                    - 117
+                                    - 115
+                                    - 32
+                                    - 112
+                                    - 111
+                                    - 114
+                                    - 114
+                                    - 111
+                                    - 32
+                                    - 102
+                                    - 117
+                                    - 103
+                                    - 105
+                                    - 116
+                                    - 46
+                                format: binary
+                            example:
+                                - 67
+                                - 111
+                                - 110
+                                - 115
+                                - 101
+                                - 113
+                                - 117
+                                - 97
+                                - 116
+                                - 117
+                                - 114
+                                - 32
+                                - 101
+                                - 116
+                                - 32
+                                - 110
+                                - 105
+                                - 104
+                                - 105
+                                - 108
+                                - 32
+                                - 113
+                                - 117
+                                - 97
+                                - 109
+                                - 32
+                                - 116
+                                - 101
+                                - 109
+                                - 112
+                                - 111
+                                - 114
+                                - 105
+                                - 98
+                                - 117
+                                - 115
+                                - 46
     /openapi.json:
         get:
             tags:
-                - create
+                - UrlShortener
             summary: Download ./gen/http/openapi.json
-            operationId: create#/openapi.json
+            operationId: UrlShortener#/openapi.json
             responses:
                 "200":
                     description: File downloaded
 components: {}
 tags:
-    - name: create
-      description: The create service performs shortening operation on long URL.
+    - name: UrlShortener

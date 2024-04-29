@@ -1,0 +1,27 @@
+// Code generated with goa v3.16.1, DO NOT EDIT.
+//
+// UrlShortener protocol buffer definition
+//
+// Command:
+// $ goa gen olayml.xyz/gotrim/design
+
+syntax = "proto3";
+
+package url_shortener;
+
+option go_package = "/url_shortenerpb";
+
+// Service is the UrlShortener service interface.
+service URLShortener {
+	// CreateShortURL implements CreateShortUrl.
+	rpc CreateShortURL (CreateShortURLRequest) returns (CreateShortURLResponse);
+}
+
+message CreateShortURLRequest {
+	// Payload for shortening a URL
+	string long_url = 1;
+}
+
+message CreateShortURLResponse {
+	bytes field = 1;
+}

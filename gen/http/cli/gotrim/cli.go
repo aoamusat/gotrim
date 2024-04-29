@@ -15,20 +15,20 @@ import (
 
 	goahttp "goa.design/goa/v3/http"
 	goa "goa.design/goa/v3/pkg"
-	createc "olayml.xyz/gotrim/gen/http/create/client"
+	urlshortenerc "olayml.xyz/gotrim/gen/http/url_shortener/client"
 )
 
 // UsageCommands returns the set of commands and sub-commands using the format
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `create create
+	return `url-shortener create-short-url
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` create create --body '{
+	return os.Args[0] + ` url-shortener create-short-url --body '{
       "long_url": "Illum praesentium eius."
    }'` + "\n" +
 		""
@@ -44,13 +44,13 @@ func ParseEndpoint(
 	restore bool,
 ) (goa.Endpoint, any, error) {
 	var (
-		createFlags = flag.NewFlagSet("create", flag.ContinueOnError)
+		urlShortenerFlags = flag.NewFlagSet("url-shortener", flag.ContinueOnError)
 
-		createCreateFlags    = flag.NewFlagSet("create", flag.ExitOnError)
-		createCreateBodyFlag = createCreateFlags.String("body", "REQUIRED", "")
+		urlShortenerCreateShortURLFlags    = flag.NewFlagSet("create-short-url", flag.ExitOnError)
+		urlShortenerCreateShortURLBodyFlag = urlShortenerCreateShortURLFlags.String("body", "REQUIRED", "")
 	)
-	createFlags.Usage = createUsage
-	createCreateFlags.Usage = createCreateUsage
+	urlShortenerFlags.Usage = urlShortenerUsage
+	urlShortenerCreateShortURLFlags.Usage = urlShortenerCreateShortURLUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -67,8 +67,8 @@ func ParseEndpoint(
 	{
 		svcn = flag.Arg(0)
 		switch svcn {
-		case "create":
-			svcf = createFlags
+		case "url-shortener":
+			svcf = urlShortenerFlags
 		default:
 			return nil, nil, fmt.Errorf("unknown service %q", svcn)
 		}
@@ -84,10 +84,10 @@ func ParseEndpoint(
 	{
 		epn = svcf.Arg(0)
 		switch svcn {
-		case "create":
+		case "url-shortener":
 			switch epn {
-			case "create":
-				epf = createCreateFlags
+			case "create-short-url":
+				epf = urlShortenerCreateShortURLFlags
 
 			}
 
@@ -111,12 +111,12 @@ func ParseEndpoint(
 	)
 	{
 		switch svcn {
-		case "create":
-			c := createc.NewClient(scheme, host, doer, enc, dec, restore)
+		case "url-shortener":
+			c := urlshortenerc.NewClient(scheme, host, doer, enc, dec, restore)
 			switch epn {
-			case "create":
-				endpoint = c.Create()
-				data, err = createc.BuildCreatePayload(*createCreateBodyFlag)
+			case "create-short-url":
+				endpoint = c.CreateShortURL()
+				data, err = urlshortenerc.BuildCreateShortURLPayload(*urlShortenerCreateShortURLBodyFlag)
 			}
 		}
 	}
@@ -127,27 +127,28 @@ func ParseEndpoint(
 	return endpoint, data, nil
 }
 
-// createUsage displays the usage of the create command and its subcommands.
-func createUsage() {
-	fmt.Fprintf(os.Stderr, `The create service performs shortening operation on long URL.
+// url-shortenerUsage displays the usage of the url-shortener command and its
+// subcommands.
+func urlShortenerUsage() {
+	fmt.Fprintf(os.Stderr, `Service is the UrlShortener service interface.
 Usage:
-    %[1]s [globalflags] create COMMAND [flags]
+    %[1]s [globalflags] url-shortener COMMAND [flags]
 
 COMMAND:
-    create: Create implements create.
+    create-short-url: CreateShortURL implements CreateShortUrl.
 
 Additional help:
-    %[1]s create COMMAND --help
+    %[1]s url-shortener COMMAND --help
 `, os.Args[0])
 }
-func createCreateUsage() {
-	fmt.Fprintf(os.Stderr, `%[1]s [flags] create create -body JSON
+func urlShortenerCreateShortURLUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] url-shortener create-short-url -body JSON
 
-Create implements create.
+CreateShortURL implements CreateShortUrl.
     -body JSON: 
 
 Example:
-    %[1]s create create --body '{
+    %[1]s url-shortener create-short-url --body '{
       "long_url": "Illum praesentium eius."
    }'
 `, os.Args[0])
