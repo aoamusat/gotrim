@@ -53,7 +53,14 @@ var _ = Service("UrlShortener", func() {
 				Attribute("long_url", String, "URL to shorten")
 				Required("long_url")
 			})
-			Response(StatusCreated)
+			Response(func() {
+				Header("Content-Type", "application/json")
+				Code(StatusCreated)
+				Body(func() {
+					Attribute("long_url")
+					Attribute("short_url")
+				})
+			})
 		})
 		GRPC(func() {
 		})
