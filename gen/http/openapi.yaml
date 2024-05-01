@@ -19,6 +19,8 @@ paths:
                 - UrlShortener
             summary: CreateShortUrl UrlShortener
             operationId: UrlShortener#CreateShortUrl
+            produces:
+                - application/json
             parameters:
                 - name: object
                   in: body
@@ -29,13 +31,12 @@ paths:
                         long_url:
                             type: string
                             description: URL to shorten
-                            example: Dolorum qui reiciendis corporis dolor consequatur ipsam.
+                            example: Consequatur et nihil quam temporibus.
             responses:
                 "201":
                     description: Created response.
                     schema:
-                        type: string
-                        format: byte
+                        $ref: '#/definitions/URLShortenerCreateShortURLResponseBody'
             schemes:
                 - http
     /openapi.json:
@@ -52,3 +53,19 @@ paths:
             schemes:
                 - http
                 - https
+definitions:
+    URLShortenerCreateShortURLResponseBody:
+        title: URLShortenerCreateShortURLResponseBody
+        type: object
+        properties:
+            long_url:
+                type: string
+                description: The long URL
+                example: Provident enim.
+            short_url:
+                type: string
+                description: The shorten URL
+                example: Occaecati inventore vel et perspiciatis.
+        example:
+            long_url: Eius porro fugit.
+            short_url: Autem autem assumenda earum.

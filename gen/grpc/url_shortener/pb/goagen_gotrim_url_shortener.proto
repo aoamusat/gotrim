@@ -18,10 +18,13 @@ service URLShortener {
 }
 
 message CreateShortURLRequest {
-	// Payload for shortening a URL
+	// URL to shorten
 	string long_url = 1;
 }
 
 message CreateShortURLResponse {
-	bytes field = 1;
+	// The shorten URL
+	optional string short_url = 1;
+	// The long URL
+	optional string long_url = 2;
 }

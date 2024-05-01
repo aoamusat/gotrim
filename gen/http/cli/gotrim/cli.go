@@ -29,7 +29,7 @@ func UsageCommands() string {
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` url-shortener create-short-url --body '{
-      "long_url": "Illum praesentium eius."
+      "long_url": "Ipsum quia quia at voluptas."
    }'` + "\n" +
 		""
 }
@@ -149,7 +149,7 @@ CreateShortURL implements CreateShortUrl.
 
 Example:
     %[1]s url-shortener create-short-url --body '{
-      "long_url": "Illum praesentium eius."
+      "long_url": "Ipsum quia quia at voluptas."
    }'
 `, os.Args[0])
 }

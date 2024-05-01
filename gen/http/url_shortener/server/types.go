@@ -9,7 +9,27 @@ package server
 
 import (
 	urlshortener "olayml.xyz/gotrim/gen/url_shortener"
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
+
+// CreateShortURLResponseBody is the type of the "UrlShortener" service
+// "CreateShortUrl" endpoint HTTP response body.
+type CreateShortURLResponseBody struct {
+	// The long URL
+	LongURL *string `form:"long_url,omitempty" json:"long_url,omitempty" xml:"long_url,omitempty"`
+	// The shorten URL
+	ShortURL *string `form:"short_url,omitempty" json:"short_url,omitempty" xml:"short_url,omitempty"`
+}
+
+// NewCreateShortURLResponseBody builds the HTTP response body from the result
+// of the "CreateShortUrl" endpoint of the "UrlShortener" service.
+func NewCreateShortURLResponseBody(res *urlshortenerviews.CreateView) *CreateShortURLResponseBody {
+	body := &CreateShortURLResponseBody{
+		ShortURL: res.ShortURL,
+		LongURL:  res.LongURL,
+	}
+	return body
+}
 
 // NewCreateShortURLPayload builds a UrlShortener service CreateShortUrl
 // endpoint payload.

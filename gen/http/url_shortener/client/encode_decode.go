@@ -16,6 +16,7 @@ import (
 
 	goahttp "goa.design/goa/v3/http"
 	urlshortener "olayml.xyz/gotrim/gen/url_shortener"
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
 
 // BuildCreateShortURLRequest instantiates a HTTP request object with method
@@ -69,14 +70,21 @@ func DecodeCreateShortURLResponse(decoder func(*http.Response) goahttp.Decoder, 
 		switch resp.StatusCode {
 		case http.StatusCreated:
 			var (
-				body []byte
+				body CreateShortURLResponseBody
 				err  error
 			)
 			err = decoder(resp).Decode(&body)
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("UrlShortener", "CreateShortUrl", err)
 			}
-			return body, nil
+			p := NewCreateShortURLCreateCreated(&body)
+			view := "default"
+			vres := &urlshortenerviews.Create{Projected: p, View: view}
+			if err = urlshortenerviews.ValidateCreate(vres); err != nil {
+				return nil, goahttp.ErrValidationError("UrlShortener", "CreateShortUrl", err)
+			}
+			res := urlshortener.NewCreate(vres)
+			return res, nil
 		default:
 			body, _ := io.ReadAll(resp.Body)
 			return nil, goahttp.ErrInvalidResponse("UrlShortener", "CreateShortUrl", resp.StatusCode, string(body))

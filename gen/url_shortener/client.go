@@ -27,11 +27,11 @@ func NewClient(createShortURL goa.Endpoint) *Client {
 
 // CreateShortURL calls the "CreateShortUrl" endpoint of the "UrlShortener"
 // service.
-func (c *Client) CreateShortURL(ctx context.Context, p *CreateShortURLPayload) (res []byte, err error) {
+func (c *Client) CreateShortURL(ctx context.Context, p *CreateShortURLPayload) (res *Create, err error) {
 	var ires any
 	ires, err = c.CreateShortURLEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.([]byte), nil
+	return ires.(*Create), nil
 }

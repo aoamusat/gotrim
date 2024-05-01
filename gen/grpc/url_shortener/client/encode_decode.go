@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	url_shortenerpb "olayml.xyz/gotrim/gen/grpc/url_shortener/pb"
 	urlshortener "olayml.xyz/gotrim/gen/url_shortener"
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
 
 // BuildCreateShortURLFunc builds the remote method to invoke for
@@ -44,10 +45,20 @@ func EncodeCreateShortURLRequest(ctx context.Context, v any, md *metadata.MD) (a
 // DecodeCreateShortURLResponse decodes responses from the UrlShortener
 // CreateShortUrl endpoint.
 func DecodeCreateShortURLResponse(ctx context.Context, v any, hdr, trlr metadata.MD) (any, error) {
+	var view string
+	{
+		if vals := hdr.Get("goa-view"); len(vals) > 0 {
+			view = vals[0]
+		}
+	}
 	message, ok := v.(*url_shortenerpb.CreateShortURLResponse)
 	if !ok {
 		return nil, goagrpc.ErrInvalidType("UrlShortener", "CreateShortUrl", "*url_shortenerpb.CreateShortURLResponse", v)
 	}
 	res := NewCreateShortURLResult(message)
-	return res, nil
+	vres := &urlshortenerviews.Create{Projected: res, View: view}
+	if err := urlshortenerviews.ValidateCreate(vres); err != nil {
+		return nil, err
+	}
+	return urlshortener.NewCreate(vres), nil
 }

@@ -10,6 +10,7 @@ package client
 import (
 	url_shortenerpb "olayml.xyz/gotrim/gen/grpc/url_shortener/pb"
 	urlshortener "olayml.xyz/gotrim/gen/url_shortener"
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
 
 // NewProtoCreateShortURLRequest builds the gRPC request type from the payload
@@ -23,7 +24,10 @@ func NewProtoCreateShortURLRequest(payload *urlshortener.CreateShortURLPayload) 
 
 // NewCreateShortURLResult builds the result type of the "CreateShortUrl"
 // endpoint of the "UrlShortener" service from the gRPC response type.
-func NewCreateShortURLResult(message *url_shortenerpb.CreateShortURLResponse) []byte {
-	result := message.Field
+func NewCreateShortURLResult(message *url_shortenerpb.CreateShortURLResponse) *urlshortenerviews.CreateView {
+	result := &urlshortenerviews.CreateView{
+		ShortURL: message.ShortUrl,
+		LongURL:  message.LongUrl,
+	}
 	return result
 }

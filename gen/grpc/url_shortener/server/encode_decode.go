@@ -14,15 +14,18 @@ import (
 	"google.golang.org/grpc/metadata"
 	url_shortenerpb "olayml.xyz/gotrim/gen/grpc/url_shortener/pb"
 	urlshortener "olayml.xyz/gotrim/gen/url_shortener"
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
 
 // EncodeCreateShortURLResponse encodes responses from the "UrlShortener"
 // service "CreateShortUrl" endpoint.
 func EncodeCreateShortURLResponse(ctx context.Context, v any, hdr, trlr *metadata.MD) (any, error) {
-	result, ok := v.([]byte)
+	vres, ok := v.(*urlshortenerviews.Create)
 	if !ok {
-		return nil, goagrpc.ErrInvalidType("UrlShortener", "CreateShortUrl", "[]byte", v)
+		return nil, goagrpc.ErrInvalidType("UrlShortener", "CreateShortUrl", "*urlshortenerviews.Create", v)
 	}
+	result := vres.Projected
+	(*hdr).Append("goa-view", vres.View)
 	resp := NewProtoCreateShortURLResponse(result)
 	return resp, nil
 }

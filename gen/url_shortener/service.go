@@ -9,12 +9,14 @@ package urlshortener
 
 import (
 	"context"
+
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
 
 // Service is the UrlShortener service interface.
 type Service interface {
 	// CreateShortURL implements CreateShortUrl.
-	CreateShortURL(context.Context, *CreateShortURLPayload) (res []byte, err error)
+	CreateShortURL(context.Context, *CreateShortURLPayload) (res *Create, err error)
 }
 
 // APIName is the name of the API as defined in the design.
@@ -33,9 +35,48 @@ const ServiceName = "UrlShortener"
 // MethodKey key.
 var MethodNames = [1]string{"CreateShortUrl"}
 
+// Create is the result type of the UrlShortener service CreateShortUrl method.
+type Create struct {
+	// The shorten URL
+	ShortURL *string
+	// The long URL
+	LongURL *string
+}
+
 // CreateShortURLPayload is the payload type of the UrlShortener service
 // CreateShortUrl method.
 type CreateShortURLPayload struct {
 	// Payload for shortening a URL
 	LongURL string
+}
+
+// NewCreate initializes result type Create from viewed result type Create.
+func NewCreate(vres *urlshortenerviews.Create) *Create {
+	return newCreate(vres.Projected)
+}
+
+// NewViewedCreate initializes viewed result type Create from result type
+// Create using the given view.
+func NewViewedCreate(res *Create, view string) *urlshortenerviews.Create {
+	p := newCreateView(res)
+	return &urlshortenerviews.Create{Projected: p, View: "default"}
+}
+
+// newCreate converts projected type Create to service type Create.
+func newCreate(vres *urlshortenerviews.CreateView) *Create {
+	res := &Create{
+		ShortURL: vres.ShortURL,
+		LongURL:  vres.LongURL,
+	}
+	return res
+}
+
+// newCreateView projects result type Create to projected type CreateView using
+// the "default" view.
+func newCreateView(res *Create) *urlshortenerviews.CreateView {
+	vres := &urlshortenerviews.CreateView{
+		ShortURL: res.ShortURL,
+		LongURL:  res.LongURL,
+	}
+	return vres
 }

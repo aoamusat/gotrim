@@ -35,6 +35,11 @@ func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 func NewCreateShortURLEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
 		p := req.(*CreateShortURLPayload)
-		return s.CreateShortURL(ctx, p)
+		res, err := s.CreateShortURL(ctx, p)
+		if err != nil {
+			return nil, err
+		}
+		vres := NewViewedCreate(res, "default")
+		return vres, nil
 	}
 }

@@ -11,6 +11,13 @@ const (
 	GRPC_PORT = 3060
 )
 
+var CreateResult = ResultType("application/vnd.create", func() {
+	Attributes(func() {
+		Field(1, "short_url", String, "The shorten URL")
+		Field(2, "long_url", String, "The long URL")
+	})
+})
+
 var _ = API("GoTrim API", func() {
 	Title("GoTrim API Service")
 	Description("URL shortening service written in Go")
@@ -45,7 +52,7 @@ var _ = Service("UrlShortener", func() {
 			Required("long_url")
 		})
 
-		Result(Bytes)
+		Result(CreateResult)
 
 		HTTP(func() {
 			POST("/api/v1/shorten")
@@ -53,8 +60,9 @@ var _ = Service("UrlShortener", func() {
 				Attribute("long_url", String, "URL to shorten")
 				Required("long_url")
 			})
+
 			Response(func() {
-				Header("Content-Type", "application/json")
+				ContentType("application/json")
 				Code(StatusCreated)
 				Body(func() {
 					Attribute("long_url")
@@ -62,7 +70,16 @@ var _ = Service("UrlShortener", func() {
 				})
 			})
 		})
+
 		GRPC(func() {
+			Message(func() { // gRPC request message
+				Field(1, "long_url", String, "URL to shorten", func() {
+					Meta("rpc:tag")
+				})
+			})
+			Response(func() {
+				Code(CodeOK)
+			})
 		})
 	})
 	Files("/openapi.json", "./gen/http/openapi.json")

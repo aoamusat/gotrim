@@ -25,7 +25,7 @@ func BuildCreateShortURLPayload(urlShortenerCreateShortURLBody string) (*urlshor
 	{
 		err = json.Unmarshal([]byte(urlShortenerCreateShortURLBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"long_url\": \"Illum praesentium eius.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"long_url\": \"Ipsum quia quia at voluptas.\"\n   }'")
 		}
 	}
 	v := &urlshortener.CreateShortURLPayload{}

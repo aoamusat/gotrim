@@ -26,75 +26,21 @@ paths:
                                 long_url:
                                     type: string
                                     description: URL to shorten
-                                    example: Provident enim.
+                                    example: Est possimus ea harum.
                             example:
-                                long_url: Occaecati inventore vel et perspiciatis.
+                                long_url: Qui dolorum quae.
                         example:
-                            long_url: Autem autem assumenda earum.
+                            long_url: Sunt deleniti.
             responses:
                 "201":
                     description: Created response.
                     content:
                         application/json:
                             schema:
-                                type: string
-                                example:
-                                    - 69
-                                    - 105
-                                    - 117
-                                    - 115
-                                    - 32
-                                    - 112
-                                    - 111
-                                    - 114
-                                    - 114
-                                    - 111
-                                    - 32
-                                    - 102
-                                    - 117
-                                    - 103
-                                    - 105
-                                    - 116
-                                    - 46
-                                format: binary
+                                $ref: '#/components/schemas/URLShortenerCreateShortURLResponseBody'
                             example:
-                                - 67
-                                - 111
-                                - 110
-                                - 115
-                                - 101
-                                - 113
-                                - 117
-                                - 97
-                                - 116
-                                - 117
-                                - 114
-                                - 32
-                                - 101
-                                - 116
-                                - 32
-                                - 110
-                                - 105
-                                - 104
-                                - 105
-                                - 108
-                                - 32
-                                - 113
-                                - 117
-                                - 97
-                                - 109
-                                - 32
-                                - 116
-                                - 101
-                                - 109
-                                - 112
-                                - 111
-                                - 114
-                                - 105
-                                - 98
-                                - 117
-                                - 115
-                                - 46
+                                long_url: Id aut corrupti soluta optio.
+                                short_url: Quia architecto odio odio qui.
     /openapi.json:
         get:
             tags:
@@ -104,6 +50,21 @@ paths:
             responses:
                 "200":
                     description: File downloaded
-components: {}
+components:
+    schemas:
+        URLShortenerCreateShortURLResponseBody:
+            type: object
+            properties:
+                long_url:
+                    type: string
+                    description: The long URL
+                    example: Explicabo repudiandae iste quia.
+                short_url:
+                    type: string
+                    description: The shorten URL
+                    example: Qui perspiciatis et eum distinctio tenetur consequuntur.
+            example:
+                long_url: Dolores velit eum laborum cumque perferendis.
+                short_url: Quia assumenda in repellat eum.
 tags:
     - name: UrlShortener

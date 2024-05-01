@@ -14,15 +14,17 @@ import (
 
 	goahttp "goa.design/goa/v3/http"
 	goa "goa.design/goa/v3/pkg"
+	urlshortenerviews "olayml.xyz/gotrim/gen/url_shortener/views"
 )
 
 // EncodeCreateShortURLResponse returns an encoder for responses returned by
 // the UrlShortener CreateShortUrl endpoint.
 func EncodeCreateShortURLResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		res, _ := v.([]byte)
+		res := v.(*urlshortenerviews.Create)
+		ctx = context.WithValue(ctx, goahttp.ContentTypeKey, "application/json")
 		enc := encoder(ctx, w)
-		body := res
+		body := NewCreateShortURLResponseBody(res.Projected)
 		w.WriteHeader(http.StatusCreated)
 		return enc.Encode(body)
 	}
