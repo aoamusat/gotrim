@@ -21,3 +21,4 @@
 go.work
 gotrim
 gotrim-cli
+gotrim.db
